@@ -1,22 +1,46 @@
-import React from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import Link from "next/link";
 import Image from "next/image";
 
-async function getData() {
-  const res = await fetch("http://localhost:3000/api/posts", {
-    cache: "no-store",
-  });
+const Blog = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("http://localhost:3000/api/posts", {
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const jsonData = await res.json();
+        setData(jsonData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setError(error);
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
 
-  return res.json();
-}
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
 
-const Blog = async () => {
-  const data = await getData();
   return (
     <div className={styles.mainContainer}>
       {data.map((item) => (

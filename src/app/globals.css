@@ -20,12 +20,12 @@ a {
 }
 
 .light {
-  background-color: white;
+  background: linear-gradient(to bottom, #fff,#666,#999);
   color: #111;
 }
 
 .dark {
-  background-color: #111;
+  background: linear-gradient(to bottom, #111,#444,#888);
   color: #bbb;
 }
 
